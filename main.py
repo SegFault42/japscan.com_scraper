@@ -15,8 +15,6 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
        'Connection': 'keep-alive'}
 
 def create_directory(manga_name, chapter_name):
-    print manga_name
-    print chapter_name
     if not os.path.exists(manga_name):
         os.makedirs(manga_name)
     if not os.path.exists(manga_name + '/' + chapter_name):
@@ -82,6 +80,9 @@ def get_all_jpg_link(website, number_pages):
     return link_list
 
 def download_all_jpg(manga_name, chapter_name, link_list):
+    print "\033[1;31mManga : \033[0m" + manga_name
+    print "\033[1;31mChapter : \033[0m" + chapter_name
+    print ""
     page_number = 1
     for link in link_list: 
         ext = link.split(".")
@@ -89,7 +90,6 @@ def download_all_jpg(manga_name, chapter_name, link_list):
         try:
             img = urllib2.urlopen(req)
         except:
-            #page_number += 1
             continue
         print "\033[1;32mDownload :\033[0m " + manga_name + "/" + chapter_name + "/" + str(page_number) + "." + ext[-1]
         localFile = open(manga_name + "/" + chapter_name + "/" + str(page_number) + "." + ext[-1], 'wb')
@@ -98,14 +98,16 @@ def download_all_jpg(manga_name, chapter_name, link_list):
         page_number += 1
 
 def main():
-    website = open_html(sys.argv[1])
-    manga_name = get_manga_name(website)
-    chapter_name = get_chapter_name(website)
-    number_pages = get_number_page(website)
-    link_list = get_all_jpg_link(website, number_pages)
-    create_directory(manga_name, chapter_name)
-    download_all_jpg(manga_name, chapter_name, link_list)
-
+    iter = 1
+    while iter < len(sys.argv):
+        website = open_html(sys.argv[iter])
+        manga_name = get_manga_name(website)
+        chapter_name = get_chapter_name(website)
+        number_pages = get_number_page(website)
+        link_list = get_all_jpg_link(website, number_pages)
+        create_directory(manga_name, chapter_name)
+        download_all_jpg(manga_name, chapter_name, link_list)
+        iter += 1
 
 if __name__ == '__main__':
     main()
