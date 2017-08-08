@@ -6,6 +6,11 @@ import sys
 import re
 import os
 from BeautifulSoup import BeautifulSoup
+import sys
+import string
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -34,7 +39,7 @@ def get_manga_name(website):
             break
     return manga_name
 
-def get_chapter_name(website):
+def get_chapter_name(website, argv):
     soup = BeautifulSoup(website)
     td = soup.findAll("td")
     chapter_name = None
@@ -51,6 +56,12 @@ def get_chapter_name(website):
                 break
     #Regex to get only the string between > and <
     chapter_name = re.findall('>(.*)<', str(chapter_name))
+    chapter_number = argv.split("/")
+    #iter = len(chapter_number)
+    i = -1
+    while chapter_number[i].isdigit() == False:
+        i -= 1
+    chapter_name[0] = chapter_number[i] + " " + chapter_name[0]
     return chapter_name[0]
 
 def get_number_page(website):
@@ -70,6 +81,11 @@ def get_all_jpg_link(website, number_pages):
     number = link.split('/')
     number = number[-1].split('.')
     first_page = number[0]
+    if first_page.isdigit() == False:
+        index = 0
+        while first_page[index].isdigit() == True:
+            index += 1
+        first_page = first_page[:index]
     iter += int(first_page) - 1
     while iter <= number_pages + int(first_page):
         if iter < 10:
@@ -102,7 +118,7 @@ def main():
     while iter < len(sys.argv):
         website = open_html(sys.argv[iter])
         manga_name = get_manga_name(website)
-        chapter_name = get_chapter_name(website)
+        chapter_name = get_chapter_name(website, sys.argv[iter])
         number_pages = get_number_page(website)
         link_list = get_all_jpg_link(website, number_pages)
         create_directory(manga_name, chapter_name)
