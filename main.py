@@ -61,7 +61,7 @@ def get_chapter_name(website, argv):
     i = -1
     while chapter_number[i].isdigit() == False:
         i -= 1
-    chapter_name[0] = chapter_number[i] + " " + chapter_name[0]
+    chapter_name[0] = "Chapitre " + chapter_number[i] + ":" + " " + chapter_name[0]
     return chapter_name[0]
 
 def get_number_page(website):
