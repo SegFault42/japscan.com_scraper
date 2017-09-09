@@ -1,12 +1,12 @@
-Requierement :
+##Requierement :
 
 pip install beautifulsoup
 
 
-Usage :
+##Usage :
 
 ./main.py http://www.japscan.com/.....
 
-exemple :
+example :
 
 ./main.py http://www.japscan.com/lecture-en-ligne/kingdom/530/
