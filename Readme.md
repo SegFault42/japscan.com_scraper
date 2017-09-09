@@ -1,9 +1,9 @@
-##Requierement :
+## Requierement :
 
 pip install beautifulsoup
 
 
-##Usage :
+## Usage :
 
 ./main.py http://www.japscan.com/.....
 
